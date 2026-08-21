@@ -19,11 +19,13 @@ class EventService:
 
     @staticmethod
     async def get_multi(
-        session: AsyncSession, skip: int = 0, limit: int = 100
+        session: AsyncSession, skip: int = 0, limit: int = 20
     ) -> list[Event]:
         stmt = (
             select(Event)
             .options(joinedload(Event.owner))
+            .offset(skip)
+            .limit(limit)
         )
         result = await session.execute(stmt)
         return list(result.scalars().all())
