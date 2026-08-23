@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 if TYPE_CHECKING:
+    from app.models.ticket import Ticket
     from app.models.user import User
 
 
@@ -25,3 +26,7 @@ class Event(Base):
     )
 
     owner: Mapped["User"] = relationship(back_populates="events")
+    tickets: Mapped[list["Ticket"]] = relationship(
+        back_populates="event",
+        cascade="all, delete-orphan",
+    )

@@ -1,4 +1,5 @@
 from app.schemas.event import EventCreate, EventRead, EventUpdate
+from app.schemas.ticket import TicketCreate, TicketRead
 from app.schemas.user import UserCreate, UserRead
 
 __all__ = [
@@ -7,4 +8,6 @@ __all__ = [
     "EventCreate",
     "EventRead",
     "EventUpdate",
+    "TicketCreate",
+    "TicketRead",
 ]
