@@ -1,5 +1,6 @@
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from app.models.event import Event
 from app.models.ticket import Ticket
@@ -8,7 +9,11 @@ from app.models.ticket import Ticket
 class TicketService:
     @staticmethod
     async def get_by_id(session: AsyncSession, ticket_id: int) -> Ticket | None:
-        stmt = select(Ticket).where(Ticket.id == ticket_id)
+        stmt = (
+            select(Ticket)
+            .options(joinedload(Ticket.event))
+            .where(Ticket.id == ticket_id)
+        )
         result = await session.execute(stmt)
         return result.scalar_one_or_none()
 
@@ -16,7 +21,11 @@ class TicketService:
     async def get_user_tickets(
         session: AsyncSession, user_id: int
     ) -> list[Ticket]:
-        stmt = select(Ticket).where(Ticket.user_id == user_id)
+        stmt = (
+            select(Ticket)
+            .options(joinedload(Ticket.event))
+            .where(Ticket.user_id == user_id)
+        )
         result = await session.execute(stmt)
         return list(result.scalars().all())
 
